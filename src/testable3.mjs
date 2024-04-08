@@ -1,12 +1,17 @@
 import { readFile } from "node:fs/promises";
 import { parse } from "csv-parse/sync";
+
 // Testing the parsing of CSV data is together with
 // reading the file itself. File reading cand be
 // separated to its own function in order to test the
 // parsing more efficiently.
-export async function parsePeopleCsv(filePath) {
-  const csvData = await readFile(filePath, { encoding: "utf8" });
-  const records = parse(csvData, {
+
+export async function readFileData(filepath) {
+  return await readFile(filepath, { encoding: "utf8" });
+}
+
+export function parsePeopleCsv(fileData) {
+    const records = parse(fileData, {
     skip_empty_lines: true,
     trim: true,
   });

@@ -1,4 +1,4 @@
-// Results of this function are random. And it is not exported. 
+// Results of this function are random. And it is not exported.
 // Test must be written so they check that all values are returned.
 export function diceRoll() {
   const min = 1;
