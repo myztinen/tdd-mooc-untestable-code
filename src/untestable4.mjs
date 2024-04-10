@@ -51,7 +51,7 @@ export class PostgresUserDao {
     );
   }
 }
-// Decouple the database from hashing. Save user and hashed password to this class
+// Decouple the database from hashing. Save user to this class
 export class PasswordService {
   users = PostgresUserDao.getInstance();
 
@@ -64,3 +64,4 @@ export class PasswordService {
     await this.users.save(user);
   }
 }
+

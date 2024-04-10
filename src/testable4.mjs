@@ -6,14 +6,11 @@ import pg from "pg";
 // functions. Create connection in the beginnig of each test. 
 // Create tables before each test and drop the after test is done.
 export class PostgresUserDao {
-  static instance;
 
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new PostgresUserDao();
-    }
-    return this.instance;
+  constructor(db) {
+    this.db = db;
   }
+
 
   db = new pg.Pool({
     user: process.env.PGUSER,
@@ -51,9 +48,12 @@ export class PostgresUserDao {
     );
   }
 }
-// Decouple the database from hashing. Save user and hashed password to this class
+// Decouple the database from hashing. Save user to this class
 export class PasswordService {
-  users = PostgresUserDao.getInstance();
+  
+  constructor(users) {
+    this.users = users;
+  }
 
   async changePassword(userId, oldPassword, newPassword) {
     const user = await this.users.getById(userId);
@@ -62,5 +62,15 @@ export class PasswordService {
     }
     user.passwordHash = argon2.hashSync(newPassword);
     await this.users.save(user);
+  }
+}
+
+export class TestPasswordHasher {
+  hashPassword(password) {
+    return argon2.hashSync(password);
+  }
+
+  verifyPassword(hash, password) {
+    return argon2.verifySync(hash, password);
   }
 }
