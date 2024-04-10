@@ -1,6 +1,10 @@
 import argon2 from "@node-rs/argon2";
 import pg from "pg";
 
+
+// Singleton database connection hampers the separate testing of
+// functions. Create connection in the beginnig of each test. 
+// Create tables before each test and drop the after test is done.
 export class PostgresUserDao {
   static instance;
 
@@ -47,7 +51,7 @@ export class PostgresUserDao {
     );
   }
 }
-
+// Decouple the database from hashing. Save user and hashed password to this class
 export class PasswordService {
   users = PostgresUserDao.getInstance();
 
